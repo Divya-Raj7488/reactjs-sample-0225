@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   CheckCircle2,
   ArrowRight,
@@ -11,30 +11,28 @@ import {
   Play,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import loginContext from "../context/loginContext";
 
 export default function Home() {
-  const [isStarting, setIsStarting] = useState(false);
   const router = useRouter();
+  const { isLoggedIn } = useContext(loginContext);
 
   const handleGetStarted = () => {
-    setIsStarting(true);
-    // Simulate navigation delay
-    setTimeout(() => {
-      alert("Navigating to TaskFlow Dashboard...");
-      setIsStarting(false);
-    }, 2000);
+    if (isLoggedIn) {
+      router.push("/tasklist");
+      return;
+    } else {
+      router.push("/login");
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-2000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-pulse animation-delay-4000"></div>
       </div>
-
-      {/* Navigation */}
       <nav className="relative z-10 bg-white/10 backdrop-blur-md border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -78,26 +76,13 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-16">
             <button
               onClick={handleGetStarted}
-              disabled={isStarting}
               className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-2xl hover:shadow-blue-500/25 transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-3 disabled:opacity-70 disabled:cursor-not-allowed min-w-[200px] justify-center"
             >
-              {isStarting ? (
-                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              ) : (
-                <>
-                  <Play className="w-6 h-6" />
-                  <span>Get Started Free</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
-
-            <button className="text-white border-2 border-white/30 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/10 transition-all duration-200 backdrop-blur-sm">
-              Watch Demo
+              <Play className="w-6 h-6" />
+              <span>Get Started Free</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
-
-          {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
             <div className="text-center">
               <div className="text-4xl font-bold text-white mb-2">10K+</div>
@@ -192,17 +177,10 @@ export default function Home() {
           </p>
           <button
             onClick={handleGetStarted}
-            disabled={isStarting}
             className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-xl font-semibold text-lg shadow-2xl hover:shadow-blue-500/25 transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-3 mx-auto disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {isStarting ? (
-              <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            ) : (
-              <>
-                <span>Start Your Free Trial</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </>
-            )}
+            <span>Start Your Free Trial</span>
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           <p className="text-gray-400 mt-4">
             No credit card required • 14-day free trial

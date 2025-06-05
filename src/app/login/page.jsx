@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
+import loginContext from "../../context/loginContext";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const { setIsLoggedIn } = useContext(loginContext);
 
   const validateForm = () => {
     const newErrors = {};
@@ -38,6 +40,7 @@ export default function LoginPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      setIsLoggedIn(true);
       alert(`Login attempted with: ${email}`);
       redirect("/tasklist");
     }, 2000);
